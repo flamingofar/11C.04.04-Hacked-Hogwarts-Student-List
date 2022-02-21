@@ -1,5 +1,94 @@
+:root {
+	--primary-color: red;
+	--primary-color: rgb(253, 156, 156);
+	--btn-color: rgb(0, 238, 255);
+	--griffendor: rgb(255, 102, 0);
+	--slytheryn: rgb(62, 146, 55);
+	--hufflepuff: rgb(238, 255, 0);
+	--revenclaw: rgb(0, 110, 255);
+}
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+main {
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
+}
+
+/* DEFAULTS */
+button {
+	border: none;
+	border-radius: 0;
+	text-align: center;
+	padding: 0.3em 0.5em;
+	background-color: var(--btn-color);
+}
+
+/* FILTER CONTAINER */
+
+/* STUDENTS CONTAINER */
+
+/* STUDENT CONTAINER */
+.student_container {
+	width: 20rem;
+	height: 10rem;
+	background: lightblue;
+	display: flex;
+}
+.student_container img,
+.info_container {
+	flex: 1;
+}
+.student_container img {
+	background: lightcoral;
+}
+
+.info_container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.info_container .info {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	height: 50%;
+	padding: 0.3em;
+}
+.info_container .student_info {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.3em;
+}
+
+/* INFO CONTAINER */
+main aside:last-child {
+}
+main aside:last-child .btn_container {
+	width: 100%;
+	display: flex;
+	justify-content: stretch;
+}
+.btn_container > * {
+	flex-grow: 1;
+	margin-top: 0.2em;
+}
+.btn_container > *:not(:last-child) {
+	flex-grow: 1;
+	margin-right: 0.2em;
+}
+.info-box {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	background-color: lightcyan;
+	border: 2px solid black;
+}
+.info-box .house_info {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 }
