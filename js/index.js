@@ -160,11 +160,13 @@ function buildList() {
 			return false;
 		}
 	}
-
 	displayList(settings.filteredStudents);
 }
 
 function displayList(cleanedList) {
+	//Show number of results
+	document.querySelector(".number_result").textContent = `Showing ${cleanedList.length} results`;
+	console.log(cleanedList.length);
 	// clear the list
 	document.querySelector(".filter_container").innerHTML = "";
 
@@ -193,6 +195,7 @@ function displayList(cleanedList) {
 
 		filterContainer.appendChild(clone);
 	});
+	displayInfoNumbers();
 }
 
 function sortingFunction() {
@@ -221,6 +224,35 @@ function sortingFunction() {
 		}
 	}
 	sortFunction();
+}
+
+function displayInfoNumbers() {
+	/* SETTING NUMBERS OF STUDENTS PER HOUSE */
+	let slytheringAmount = settings.allStudents.filter((student) => {
+		return student.house === "slytherin";
+	});
+	let hufflepuffAmount = settings.allStudents.filter((student) => {
+		return student.house === "hufflepuff";
+	});
+	let ravenclawAmount = settings.allStudents.filter((student) => {
+		return student.house === "ravenclaw";
+	});
+	let gryffindorAmount = settings.allStudents.filter((student) => {
+		return student.house === "gryffindor";
+	});
+	document.querySelector(".slytherin_amount").textContent = slytheringAmount.length;
+	document.querySelector(".hufflepuff_amount").textContent = hufflepuffAmount.length;
+	document.querySelector(".ravenclaw_amount").textContent = ravenclawAmount.length;
+	document.querySelector(".gryffindor_amount").textContent = gryffindorAmount.length;
+	/* SETTING TOTAL NUMBER OF STUDENTS */
+	let totalAmount = settings.allStudents.filter((student) => {
+		return student.expelled === false;
+	});
+	let totalAmountExpelled = settings.allStudents.filter((student) => {
+		return student.expelled === true;
+	});
+	document.querySelector(".not_expelled").textContent = totalAmount.length;
+	document.querySelector(".expelled").textContent = totalAmountExpelled.length;
 }
 
 setup();

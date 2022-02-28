@@ -14,6 +14,8 @@
 		</header>
 		<main>
 			<aside>
+				<p class="number_result">Showing %% results</p>
+
 				<input type="text" placeholder="Search Student" />
 				<select name="sort" id="sort">
 					<option value="" selected>Sort by:</option>
@@ -55,7 +57,9 @@
 				</div>
 				<button class="reset" data-action="filter" data-filter="*">All</button>
 			</aside>
-			<section class="filter_container"></section>
+			<section>
+				<div class="filter_container"></div>
+			</section>
 			<template id="student_template">
 				<div class="student_container" data-squad="false" data-prefect="false">
 					<img src="./assets/img/abbott_h.jpg" alt="student" />
@@ -78,13 +82,13 @@
 						<h4>House</h4>
 						<h4>Members</h4>
 						<h5>Slytherin</h5>
-						<div class="amount">%AMOUNT%</div>
+						<div class="slytherin_amount amount">%AMOUNT%</div>
 						<h5>Hufflepuff</h5>
-						<div class="amount">%AMOUNT%</div>
+						<div class="hufflepuff_amount amount">%AMOUNT%</div>
 						<h5>Ravenclaw</h5>
-						<div class="amount">%AMOUNT%</div>
+						<div class="ravenclaw_amount amount">%AMOUNT%</div>
 						<h5>Griffindor</h5>
-						<div class="amount">%AMOUNT%</div>
+						<div class="gryffindor_amount amount">%AMOUNT%</div>
 					</div>
 					<div class="student_info">
 						<h4>Students</h4>

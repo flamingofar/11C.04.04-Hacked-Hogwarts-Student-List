@@ -19,6 +19,9 @@ main {
 }
 
 /* DEFAULTS */
+h5 {
+	display: inline-block;
+}
 button {
 	border: none;
 	border-radius: 0;
@@ -151,7 +154,7 @@ main aside:last-child .btn_container {
 main aside:first-child {
 	display: flex;
 	flex-direction: column;
-	padding: 0.5rem 0.9rem;
+	padding: 0 0.9rem;
 }
 main aside:first-child div:not(:last-child) {
 	margin-bottom: 0.5rem;
