@@ -1,5 +1,4 @@
 "use strict";
-console.log("Hacked");
 
 /*
 Student list URL
@@ -11,7 +10,9 @@ const settings = {
 	filter: "*",
 	allStudents: null,
 	filteredStudents: null,
+	expelledStudents: [],
 };
+window.addEventListener("DOMContentLoaded", setup);
 function setup() {
 	// Fetch data
 	const url = "https://petlatkea.dk/2021/hogwarts/students.json";
@@ -26,7 +27,6 @@ function setup() {
 	});
 	/* SORT SELECT */
 	const sortSelect = document.querySelector("#sort");
-	console.log(sortSelect);
 	sortSelect.addEventListener("change", sortingFunction);
 	/* PREFECT BUTTON */
 	const prefects = document.querySelector(".button.prefects");
@@ -45,7 +45,7 @@ function setup() {
 async function fetchJSON(url) {
 	const response = await fetch(url);
 	const studentData = await response.json();
-	console.table(studentData);
+	// console.table(studentData);
 
 	settings.allStudents = cleanData(studentData);
 	settings.filteredStudents = settings.allStudents;
@@ -123,16 +123,11 @@ function buildList() {
 	settings.filter = this.dataset.filter;
 	let filterType = this.dataset.filterType;
 
-	console.log(settings.filter, typeof settings.filter);
-	console.log(filterType);
-
 	if (settings.filter === "*") {
 		settings.filteredStudents = settings.allStudents;
 	} else if (settings.filter === "false") {
-		console.log("first");
 		settings.filteredStudents = settings.allStudents.filter(filterStudentsNotExpelled);
 	} else if (settings.filter === "true") {
-		console.log("first");
 		settings.filteredStudents = settings.allStudents.filter(filterStudentsExpelled);
 	} else if (settings.filter !== "*") {
 		settings.filteredStudents = settings.allStudents.filter(filterStudents);
@@ -166,19 +161,19 @@ function buildList() {
 function displayList(cleanedList) {
 	//Show number of results
 	document.querySelector(".number_result").textContent = `Showing ${cleanedList.length} results`;
-	console.log(cleanedList.length);
 	// clear the list
 	document.querySelector(".filter_container").innerHTML = "";
 
 	const filterContainer = document.querySelector(".filter_container");
 	const studentTemplate = document.querySelector("#student_template");
 
-	cleanedList.forEach((student) => {
+	cleanedList.forEach((student, idx) => {
 		let clone = studentTemplate.cloneNode(true).content;
 		clone.querySelector("img").src = student.imageSrc;
 		clone.querySelector(".name").textContent = `${student.firstName} ${student.middleName ? student.middleName : " "} ${student.lastName}`;
 		clone.querySelector(".house").textContent = student.house;
 
+		clone.querySelector(".student_container").setAttribute("data-id", `${idx}`);
 		if (student.inqSquad) {
 			clone.querySelector(".student_container").setAttribute("data-squad", "true");
 		}
@@ -191,6 +186,9 @@ function displayList(cleanedList) {
 			clone.querySelector(".status").textContent = "";
 		}
 
+		//TODO TESTING ONLY
+		clone.querySelector(".student_container").addEventListener("click", expellStudent);
+
 		clone.querySelector(".studentID").textContent = `Nr. ${student.studentID}`;
 
 		filterContainer.appendChild(clone);
@@ -200,8 +198,6 @@ function displayList(cleanedList) {
 
 function sortingFunction() {
 	let sortParam = this.value;
-	console.log(sortParam);
-	console.log(settings.filteredStudents);
 
 	function sortFunction() {
 		settings.filteredStudents.sort(compare);
@@ -245,14 +241,20 @@ function displayInfoNumbers() {
 	document.querySelector(".ravenclaw_amount").textContent = ravenclawAmount.length;
 	document.querySelector(".gryffindor_amount").textContent = gryffindorAmount.length;
 	/* SETTING TOTAL NUMBER OF STUDENTS */
-	let totalAmount = settings.allStudents.filter((student) => {
-		return student.expelled === false;
-	});
-	let totalAmountExpelled = settings.allStudents.filter((student) => {
+	let notExpelled = settings.allStudents.filter((student) => {
 		return student.expelled === true;
 	});
-	document.querySelector(".not_expelled").textContent = totalAmount.length;
-	document.querySelector(".expelled").textContent = totalAmountExpelled.length;
+	let expelled = settings.allStudents.filter((student) => {
+		return student.expelled === false;
+	});
+	document.querySelector(".not_expelled").textContent = notExpelled.length;
+	document.querySelector(".expelled").textContent = expelled.length;
 }
 
-setup();
+function expellStudent() {
+	// Get clicked student id
+	let student = this.dataset.id;
+	// Set Expelled to true
+	settings.allStudents[student].expelled = true;
+	displayList(settings.filteredStudents);
+}
