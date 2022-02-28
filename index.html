@@ -18,76 +18,52 @@
 				<div class="filter_house">
 					<h3>Filter by house</h3>
 					<div class="btn_container">
-						<button data-house="slytherin">Slytherin</button>
-						<button data-house="hufflepuff">Hufflepuff</button>
-						<button data-house="ravenclaw">Ravenclaw</button>
-						<button data-house="griffendor">Griffindor</button>
+						<button data-action="filter" data-filter="slytherin">Slytherin</button>
+						<button data-action="filter" data-filter="hufflepuff">Hufflepuff</button>
+						<button data-action="filter" data-filter="ravenclaw">Ravenclaw</button>
+						<button data-action="filter" data-filter="griffendor">Griffindor</button>
 					</div>
 				</div>
 				<div class="filter_gender">
 					<h3>Filter by gender</h3>
 					<div class="btn_container">
-						<button data-house="boys">Boys</button>
-						<button data-house="girls">Girls</button>
+						<button data-action="filter" data-filter="boys">Boys</button>
+						<button data-action="filter" data-filter="girls">Girls</button>
 					</div>
 				</div>
 				<div class="filter_status">
 					<h3>Filter by status</h3>
 					<div class="btn_container">
-						<button data-house="expelled">Expelled</button>
-						<button data-house="non-expelled">Non-Expelled</button>
-						<button data-house="inq_squad">Inquisitorial Squad</button>
-						<button data-house="prefect">Prefects</button>
+						<button data-action="filter" data-filter="expelled">Expelled</button>
+						<button data-action="filter" data-filter="non-expelled">Non-Expelled</button>
+						<button data-action="filter" data-filter="inq_squad">Inquisitorial Squad</button>
+						<button data-action="filter" data-filter="prefect">Prefects</button>
 					</div>
 				</div>
 				<div class="filter_blood">
 					<h3>Filter by blood</h3>
 					<div class="btn_container">
-						<button data-house="pureblood">Pure Blood</button>
-						<button data-house="halfblood">Half Blood</button>
+						<button data-action="filter" data-filter="pureblood">Pure Blood</button>
+						<button data-action="filter" data-filter="halfblood">Half Blood</button>
 					</div>
 				</div>
 			</aside>
 			<section class="filter_container">
-				<div class="student_container" data-squad="true" data-prefect="true">
-					<img src="./assets/img/abbott_h.jpg" alt="student" />
-					<div class="info_container">
-						<div class="info">
-							<h4>John Willow Doe</h4>
-							<h4>Griffindor</h4>
-						</div>
-						<div class="student_info">
-							<p>Expelled</p>
-							<p>Nr. 2</p>
-						</div>
-					</div>
-				</div>
-				<div class="student_container">
-					<img src="./assets/img/abbott_h.jpg" alt="student" />
-					<div class="info_container">
-						<div class="info">
-							<h4>John Willow Doe</h4>
-							<h4>Griffindor</h4>
-						</div>
-						<div class="student_info">
-							<p>Expelled</p>
-							<p>Nr. 2</p>
+				<template id="student_template">
+					<div class="student_container" data-squad="false" data-prefect="false">
+						<img src="./assets/img/abbott_h.jpg" alt="student" />
+						<div class="info_container">
+							<div class="info">
+								<h4 class="name">John Willow Doe</h4>
+								<h4 class="house">Griffindor</h4>
+							</div>
+							<div class="student_info">
+								<p class="status">Expelled</p>
+								<p class="studentID">Nr. 2</p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="student_container" data-squad="true">
-					<img src="./assets/img/abbott_h.jpg" alt="student" />
-					<div class="info_container">
-						<div class="info">
-							<h4>John Willow Doe</h4>
-							<h4>Griffindor</h4>
-						</div>
-						<div class="student_info">
-							<p>Expelled</p>
-							<p>Nr. 2</p>
-						</div>
-					</div>
-				</div>
+				</template>
 			</section>
 			<aside>
 				<div class="info-box">

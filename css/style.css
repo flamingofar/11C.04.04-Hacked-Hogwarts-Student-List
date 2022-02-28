@@ -127,6 +127,7 @@ main aside:last-child .btn_container {
 .btn_container > * {
 	flex-grow: 1;
 	margin-top: 0.2em;
+	cursor: pointer;
 }
 .btn_container > *:not(:last-child) {
 	flex-grow: 1;
@@ -172,4 +173,5 @@ main aside:first-child input {
 .filter_blood .btn_container > * {
 	flex: 0 0 49%;
 	padding: 0.5rem 0.5rem;
+	cursor: pointer;
 }
