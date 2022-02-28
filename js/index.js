@@ -7,6 +7,11 @@ https://petlatkea.dk/2021/hogwarts/students.json
 Family list URL
 https://petlatkea.dk/2021/hogwarts/families.json
 */
+const settings = {
+	filter: "*",
+	allStudents: null,
+	filteredStudents: null,
+};
 function setup() {
 	// Fetch data
 	const url = "https://petlatkea.dk/2021/hogwarts/students.json";
@@ -17,10 +22,12 @@ function setup() {
 	/* FILTER BUTTONS */
 	const filterBtns = document.querySelectorAll("[data-action=filter]");
 	filterBtns.forEach((btn) => {
-		btn.addEventListener("click", (e) => {
-			console.log(e.target.dataset.filter);
-		});
+		btn.addEventListener("click", buildList);
 	});
+	/* SORT SELECT */
+	const sortSelect = document.querySelector("#sort");
+	console.log(sortSelect);
+	sortSelect.addEventListener("change", sortingFunction);
 	/* PREFECT BUTTON */
 	const prefects = document.querySelector(".button.prefects");
 	prefects.addEventListener("click", () => {
@@ -38,11 +45,13 @@ function setup() {
 async function fetchJSON(url) {
 	const response = await fetch(url);
 	const studentData = await response.json();
-	// console.table(studentData);
+	console.table(studentData);
 
-	let cleanedDataList = cleanData(studentData);
-	buildList(cleanedDataList);
-	console.table(cleanedDataList);
+	settings.allStudents = cleanData(studentData);
+	settings.filteredStudents = settings.allStudents;
+
+	// console.table(settings.allStudents);
+	displayList(settings.allStudents);
 }
 
 function cleanData(data) {
@@ -73,6 +82,9 @@ function cleanData(data) {
 		// Setting Object Property Values
 		// Student ID by idx
 		student.studentID = idx + 1;
+		student.expelled = false;
+		student.bloodLine = "";
+
 		// Firstname: Check if name conatins a space
 		if (originalName.includes(" ")) {
 			student.firstName = originalName.substring(0, 1).toUpperCase() + originalName.substring(1, originalName.indexOf(" "));
@@ -95,31 +107,75 @@ function cleanData(data) {
 		}
 
 		// Uppercase Gender
-		student.gender = gender.substring(0, 1).toUpperCase() + gender.substring(1).toLowerCase();
+		student.gender = gender.toLowerCase();
 		// Set Image Source
 		student.imageSrc = `../assets/img/${originalName.substring(originalName.lastIndexOf(" ") + 1).toLowerCase()}_${student.firstName.charAt(0).toLowerCase()}.jpg`;
 		// Uppercase House
-		student.house = house.substring(0, 1).toUpperCase() + house.substring(1).toLowerCase();
+		student.house = house.toLowerCase();
 
 		dataList.push(student);
 	});
 	return dataList;
 }
 
-function buildList(studentList) {
-	let newArr = studentList;
+function buildList() {
+	settings.filteredStudents;
+	settings.filter = this.dataset.filter;
+	let filterType = this.dataset.filterType;
 
-	displayList(newArr);
+	console.log(settings.filter, typeof settings.filter);
+	console.log(filterType);
+
+	if (settings.filter === "*") {
+		settings.filteredStudents = settings.allStudents;
+	} else if (settings.filter === "false") {
+		console.log("first");
+		settings.filteredStudents = settings.allStudents.filter(filterStudentsNotExpelled);
+	} else if (settings.filter === "true") {
+		console.log("first");
+		settings.filteredStudents = settings.allStudents.filter(filterStudentsExpelled);
+	} else if (settings.filter !== "*") {
+		settings.filteredStudents = settings.allStudents.filter(filterStudents);
+	} else {
+		settings.filteredStudents = settings.allStudents;
+	}
+	function filterStudents(student) {
+		if (student[filterType] === settings.filter) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function filterStudentsExpelled(student) {
+		if (student[filterType] === true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function filterStudentsNotExpelled(student) {
+		if (student[filterType] === false) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	displayList(settings.filteredStudents);
 }
 
 function displayList(cleanedList) {
+	// clear the list
+	document.querySelector(".filter_container").innerHTML = "";
+
 	const filterContainer = document.querySelector(".filter_container");
 	const studentTemplate = document.querySelector("#student_template");
 
-	cleanedList.forEach((student, idx) => {
+	cleanedList.forEach((student) => {
 		let clone = studentTemplate.cloneNode(true).content;
 		clone.querySelector("img").src = student.imageSrc;
 		clone.querySelector(".name").textContent = `${student.firstName} ${student.middleName ? student.middleName : " "} ${student.lastName}`;
+		clone.querySelector(".house").textContent = student.house;
 
 		if (student.inqSquad) {
 			clone.querySelector(".student_container").setAttribute("data-squad", "true");
@@ -137,6 +193,34 @@ function displayList(cleanedList) {
 
 		filterContainer.appendChild(clone);
 	});
+}
+
+function sortingFunction() {
+	let sortParam = this.value;
+	console.log(sortParam);
+	console.log(settings.filteredStudents);
+
+	function sortFunction() {
+		settings.filteredStudents.sort(compare);
+
+		displayList(settings.filteredStudents);
+	}
+
+	function compare(a, b) {
+		if (a[sortParam] < b[sortParam]) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+	function compareReverse(a, b) {
+		if (a[sortParam] > b[sortParam]) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+	sortFunction();
 }
 
 setup();

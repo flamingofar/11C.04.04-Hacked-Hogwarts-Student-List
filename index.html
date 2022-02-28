@@ -15,56 +15,62 @@
 		<main>
 			<aside>
 				<input type="text" placeholder="Search Student" />
+				<select name="sort" id="sort">
+					<option value="" selected>Sort by:</option>
+					<option value="firstName" data-action="sort" data-direction="asc">First Name</option>
+					<option value="lastName" data-action="sort" data-direction="asc">Last Name</option>
+					<option value="house" data-action="sort" data-direction="asc">House</option>
+				</select>
 				<div class="filter_house">
 					<h3>Filter by house</h3>
 					<div class="btn_container">
-						<button data-action="filter" data-filter="slytherin">Slytherin</button>
-						<button data-action="filter" data-filter="hufflepuff">Hufflepuff</button>
-						<button data-action="filter" data-filter="ravenclaw">Ravenclaw</button>
-						<button data-action="filter" data-filter="griffendor">Griffindor</button>
+						<button data-action="filter" data-filter="slytherin" data-filter-type="house">Slytherin</button>
+						<button data-action="filter" data-filter="hufflepuff" data-filter-type="house">Hufflepuff</button>
+						<button data-action="filter" data-filter="ravenclaw" data-filter-type="house">Ravenclaw</button>
+						<button data-action="filter" data-filter="gryffindor" data-filter-type="house">Gryffindor</button>
 					</div>
 				</div>
 				<div class="filter_gender">
 					<h3>Filter by gender</h3>
 					<div class="btn_container">
-						<button data-action="filter" data-filter="boys">Boys</button>
-						<button data-action="filter" data-filter="girls">Girls</button>
+						<button data-action="filter" data-filter="boy" data-filter-type="gender">Boys</button>
+						<button data-action="filter" data-filter="girl" data-filter-type="gender">Girls</button>
 					</div>
 				</div>
 				<div class="filter_status">
 					<h3>Filter by status</h3>
 					<div class="btn_container">
-						<button data-action="filter" data-filter="expelled">Expelled</button>
-						<button data-action="filter" data-filter="non-expelled">Non-Expelled</button>
-						<button data-action="filter" data-filter="inq_squad">Inquisitorial Squad</button>
-						<button data-action="filter" data-filter="prefect">Prefects</button>
+						<button data-action="filter" data-filter="true" data-filter-type="expelled">Expelled</button>
+						<button data-action="filter" data-filter="false" data-filter-type="expelled">Non-Expelled</button>
+						<button data-action="filter" data-filter="inq_squad" data-filter-type="inq_squad">Inquisitorial Squad</button>
+						<button data-action="filter" data-filter="prefect" data-filter-type="prefect">Prefects</button>
 					</div>
 				</div>
 				<div class="filter_blood">
 					<h3>Filter by blood</h3>
 					<div class="btn_container">
-						<button data-action="filter" data-filter="pureblood">Pure Blood</button>
-						<button data-action="filter" data-filter="halfblood">Half Blood</button>
+						<button data-action="filter" data-filter="pureblood" data-filter-type="bloodline">Pure Blood</button>
+						<button data-action="filter" data-filter="halfblood" data-filter-type="bloodline">Half Blood</button>
 					</div>
 				</div>
+				<button class="reset" data-action="filter" data-filter="*">All</button>
 			</aside>
-			<section class="filter_container">
-				<template id="student_template">
-					<div class="student_container" data-squad="false" data-prefect="false">
-						<img src="./assets/img/abbott_h.jpg" alt="student" />
-						<div class="info_container">
-							<div class="info">
-								<h4 class="name">John Willow Doe</h4>
-								<h4 class="house">Griffindor</h4>
-							</div>
-							<div class="student_info">
-								<p class="status">Expelled</p>
-								<p class="studentID">Nr. 2</p>
-							</div>
+			<section class="filter_container"></section>
+			<template id="student_template">
+				<div class="student_container" data-squad="false" data-prefect="false">
+					<img src="./assets/img/abbott_h.jpg" alt="student" />
+					<div class="info_container">
+						<div class="info">
+							<h4 class="name">John Willow Doe</h4>
+							<h4 class="house">Griffindor</h4>
+						</div>
+						<div class="student_info">
+							<p class="status">Expelled</p>
+							<p class="studentID">Nr. 2</p>
 						</div>
 					</div>
-				</template>
-			</section>
+				</div>
+			</template>
 			<aside>
 				<div class="info-box">
 					<h3>ABOUT HOGWARTS</h3>
