@@ -10,7 +10,6 @@ const settings = {
 	filter: "*",
 	allStudents: null,
 	filteredStudents: null,
-	expelledStudents: [],
 };
 window.addEventListener("DOMContentLoaded", setup);
 function setup() {
@@ -20,6 +19,10 @@ function setup() {
 	fetchJSON(url);
 
 	// Set eventlisteners
+	/* SEARCH FIELD */
+	const searchField = document.querySelector("#search");
+	searchField.addEventListener("input", searchStudents);
+
 	/* FILTER BUTTONS */
 	const filterBtns = document.querySelectorAll("[data-action=filter]");
 	filterBtns.forEach((btn) => {
@@ -194,6 +197,19 @@ function displayList(cleanedList) {
 		filterContainer.appendChild(clone);
 	});
 	displayInfoNumbers();
+}
+
+function searchStudents(evt) {
+	displayList(
+		settings.allStudents.filter((elm) => {
+			// comparing in uppercase so that m is the same as M
+			return (
+				elm.firstName.toUpperCase().includes(evt.target.value.toUpperCase()) ||
+				elm.lastName.toUpperCase().includes(evt.target.value.toUpperCase()) ||
+				elm.house.toUpperCase().includes(evt.target.value.toUpperCase())
+			);
+		})
+	);
 }
 
 function sortingFunction() {

@@ -16,7 +16,7 @@
 			<aside>
 				<p class="number_result">Showing %% results</p>
 
-				<input type="text" placeholder="Search Student" />
+				<input id="search" type="text" placeholder="Search Student" />
 				<select name="sort" id="sort">
 					<option value="" selected>Sort by:</option>
 					<option value="firstName" data-action="sort" data-direction="asc">First Name</option>
@@ -61,7 +61,7 @@
 				<div class="filter_container"></div>
 			</section>
 			<template id="student_template">
-				<div class="student_container" data-squad="false" data-prefect="false">
+				<div class="student_container" data-squad="false" data-prefect="false" data-id="0">
 					<img src="./assets/img/abbott_h.jpg" alt="student" />
 					<div class="info_container">
 						<div class="info">
