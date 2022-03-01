@@ -112,6 +112,53 @@
 					</button>
 				</div>
 			</aside>
+
+			<!-- POPUPS -->
+			<!-- Details Modal -->
+			<div class="details_modal hide">
+				<div class="backdrop"></div>
+				<div class="details_modal_container">
+					<div class="close_btn">&#x2715;</div>
+					<div class="details">
+						<div class="left">
+							<img src="./assets/img/abbott_h.jpg" alt="" />
+							<div class="btn_container">
+								<button id="prefect">Make Prefect</button>
+								<button id="inq_squad">
+									Add To <br />
+									Inquisitorial Squad
+								</button>
+							</div>
+						</div>
+						<div class="right">
+							<ul>
+								<li class="firstname">FirstName: <span></span></li>
+								<li class="middlename">Middle/Nickname: <span></span></li>
+								<li class="lastname">LastName: <span></span></li>
+								<li class="house">House: <span></span></li>
+								<li class="blood">Blood: <span></span></li>
+							</ul>
+							<button class="expell_btn">Expell</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Same Gender Popup -->
+			<div class="same_gender_popup popup hide">
+				<div class="backdrop"></div>
+				<div class="popup_container">
+					<div class="close_btn">&#x2715;</div>
+					<div class="popup_details">
+						<h3>WARNING!</h3>
+						<p>Woaw woaw woaw! There are already 1 <span class="gender">GENDER</span> from <span class="house">HOUSE</span> as prefect!</p>
+						<p>You want to appoint <span class="name">NAME</span> as new <span class="gender2">GENDER</span> prefect?</p>
+						<div class="btn_container">
+							<button class="yes">Yes Please</button>
+							<button class="no">No Thanks</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</main>
 		<footer></footer>
 		<script src="./js/index.js"></script>
