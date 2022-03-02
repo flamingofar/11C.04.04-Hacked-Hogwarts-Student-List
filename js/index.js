@@ -12,7 +12,7 @@ const settings = {
 	allStudents: null,
 	filteredStudents: null,
 	blood: null,
-	wasHacked: null,
+	wasHacked: false,
 };
 const Student = {
 	studentID: null,
@@ -55,16 +55,6 @@ async function setup() {
 	/* SORT SELECT */
 	const sortSelect = document.querySelector("#sort");
 	sortSelect.addEventListener("change", sortingFunction);
-	/* PREFECT BUTTON */
-	const prefects = document.querySelector(".button.prefects");
-	prefects.addEventListener("click", () => {
-		console.log("PREFECTS");
-	});
-	/* INQ SQUAD BUTTON */
-	const inqSquad = document.querySelector(".button.inq_squad");
-	inqSquad.addEventListener("click", () => {
-		console.log("Inquisitorial Squad");
-	});
 
 	// Build list
 }
@@ -137,7 +127,7 @@ function cleanData(data) {
 	return dataList;
 }
 
-/********************************************* FILTERING *********************************************/
+/********************************************* FILTERING || GATEWAY TO DISPLATLIST *********************************************/
 function buildList() {
 	//TODO: Fix rest of filter
 	// settings.filteredStudents = settings.allStudents;
@@ -217,7 +207,6 @@ function displayList(students) {
 		// DETAILS MODAL
 		clone.querySelector(".student_container").addEventListener("click", detailsClick);
 		function detailsClick() {
-			console.log("Details  Click: ", student);
 			showDetails(student);
 		}
 
@@ -312,7 +301,6 @@ function expellStudent(studentToExpell) {
 /********************************************* DETAILS POPUP  *********************************************/
 function showDetails(student) {
 	//TODO Set color and crest
-	console.log(student);
 	const modal = document.querySelector(".details_modal");
 	const backdrop = document.querySelector(".backdrop");
 
@@ -325,13 +313,18 @@ function showDetails(student) {
 	modal.querySelector(".house span").textContent = student.house;
 	modal.querySelector(".blood span").textContent = student.bloodLine;
 
+	/********************************************* EXPELL STUDENT *********************************************/
 	// Expell button
 	modal.querySelector(".expell_btn").addEventListener("click", expellClick);
 
 	function expellClick() {
-		modal.querySelector(".expell_btn").removeEventListener("click", expellClick);
-		expellStudent(student);
-		closeClick();
+		if (student.cantBeExpelled !== true) {
+			modal.querySelector(".expell_btn").removeEventListener("click", expellClick);
+			expellStudent(student);
+			closeClick();
+		} else {
+			alert("CANT BE EXPELLED!");
+		}
 	}
 	// If Expelled
 	if (student.expelled) {
@@ -354,7 +347,6 @@ function showDetails(student) {
 	modal.querySelector("#prefect").addEventListener("click", prefectClick);
 
 	function prefectClick() {
-		console.log("Selected Student: ", student);
 		modal.querySelector("#prefect").removeEventListener("click", prefectClick);
 		if (student.prefect === true) {
 			student.prefect = false;
@@ -384,12 +376,9 @@ function showDetails(student) {
 		modal.querySelector("#inq_squad").removeEventListener("click", inqSquadClick);
 
 		if (student.inqSquad === true) {
-			console.log("Setting to false");
 			student.inqSquad = false;
 			buildList();
 		} else {
-			console.log("Making InqSquad");
-
 			makeInqSquad(student);
 		}
 		closeClick();
@@ -419,7 +408,6 @@ function makePrefect(selectedStudent) {
 	// console.log("Same house", sameHouse);
 	// console.log("Same house same gender", sameGender);
 
-	// console.log(sameHouse);
 	if (sameHouse.length > 0) {
 		if (sameGender.length > 0) {
 			removeSameGender(sameGender[0]);
@@ -468,7 +456,7 @@ function makePrefect(selectedStudent) {
 			buildList();
 			sameGenderPU.querySelector(".yes").removeEventListener("click", removeSameClick);
 
-			console.log(prefects);
+			// console.log(prefects);
 		}
 	}
 
@@ -503,6 +491,10 @@ function makeInqSquad(selectedStudent) {
 		//TODO: Make popup alert for not eligable inqsquad
 		console.log("HOLD UP!");
 	}
+
+	if (settings.wasHacked) {
+		resetInqSquad();
+	}
 }
 
 /********************************************* GET KEYSTROKES *********************************************/
@@ -528,8 +520,6 @@ function getKeys() {
 		buffer.push(key);
 		lastKeyTime = currentTime;
 
-		console.log(buffer);
-		console.log(lastKeyTime);
 		if (buffer.join("") === "hackme") {
 			hackTheSystem();
 		}
@@ -543,6 +533,9 @@ function hackTheSystem() {
 	} else {
 		settings.wasHacked = true;
 		addSelf();
+		randomizeBlood(settings.allStudents);
+		buildList();
+		resetInqSquad();
 		console.log("Hacking started");
 	}
 }
@@ -557,9 +550,33 @@ function addSelf() {
 	self.house = "Gryffindor";
 	self.imageSrc = "./assets/img/mig.jpg";
 	self.cantBeExpelled = true;
+	self.bloodLine = "Muggle";
 
-	console.log(self);
 	settings.allStudents.push(self);
-	buildList();
-	console.log(settings.allStudents);
+}
+
+function randomizeBlood(students) {
+	students.forEach((student) => {
+		const getNr = randomNr();
+		const bloodArr = ["Muggle", "Halfblood", "Pureblood"];
+		if (student.bloodLine === "Pureblood") {
+			student.bloodLine = bloodArr[getNr];
+		} else {
+			student.bloodLine = "Pureblood";
+		}
+	});
+}
+
+function randomNr() {
+	return Math.floor(Math.random() * 3);
+}
+
+function resetInqSquad() {
+	const randTime = Math.floor(Math.random() * 10) * 1000;
+	setTimeout(() => {
+		settings.allStudents.forEach((student) => {
+			student.inqSquad = false;
+		});
+		buildList();
+	}, randTime);
 }
