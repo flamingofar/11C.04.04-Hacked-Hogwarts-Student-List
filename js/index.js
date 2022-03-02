@@ -72,6 +72,8 @@ async function fetchJSON(studentURL, bloodURL) {
 	settings.allStudents = cleanData(studentData);
 	settings.filteredStudents = settings.allStudents;
 
+	// console.log(studentData);
+
 	buildList();
 }
 
@@ -116,10 +118,28 @@ function cleanData(data) {
 
 		// Uppercase Gender
 		student.gender = gender.toLowerCase();
+
 		// Set Image Source
-		student.imageSrc = `../assets/img/${originalName.substring(originalName.lastIndexOf(" ") + 1).toLowerCase()}_${student.firstName.charAt(0).toLowerCase()}.jpg`;
+		let imgSrc;
+		if (originalName.includes("-")) {
+			imgSrc = `./assets/img/${originalName.substring(originalName.lastIndexOf("-") + 1).toLowerCase()}_${student.firstName.charAt(0).toLowerCase()}.jpg`;
+		} else if (!originalName.includes(" ")) {
+			imgSrc = "./assets/img/placeholder.jpg";
+		} else if (originalName.toLowerCase().includes("patil")) {
+			if (originalName.toLowerCase().includes("padma")) {
+				imgSrc = "./assets/img/patil_padma.jpg";
+			} else if (originalName.toLowerCase().includes("parvati")) {
+				imgSrc = "./assets/img/patil_parvati.jpg";
+			}
+		} else {
+			imgSrc = `./assets/img/${originalName.substring(originalName.lastIndexOf(" ") + 1).toLowerCase()}_${student.firstName.charAt(0).toLowerCase()}.jpg`;
+		}
+		student.imageSrc = imgSrc;
+
 		//House
 		student.house = house.substring(0, 1).toUpperCase() + house.substring(1).toLowerCase();
+
+		//Bloodline
 		student.bloodLine = whichBlood(student.lastName);
 
 		dataList.push(student);
@@ -205,7 +225,6 @@ function displayList(students) {
 
 	students.forEach((student, idx) => {
 		let clone = studentTemplate.cloneNode(true).content;
-		//TODO: BILLEDER
 		clone.querySelector("img").src = student.imageSrc;
 		clone.querySelector(".name").textContent = `${student.firstName} ${student.middleName ? student.middleName : " "} ${student.lastName}`;
 		clone.querySelector(".house").textContent = student.house;
@@ -221,9 +240,9 @@ function displayList(students) {
 		}
 		// If student is expelled
 		if (student.expelled) {
-			clone.querySelector(".status").textContent = "Expelled";
+			clone.querySelector(".student_container").classList.add("expelled_student");
 		} else {
-			clone.querySelector(".status").textContent = "";
+			clone.querySelector(".student_container").classList.remove("expelled_student");
 		}
 
 		// DETAILS MODAL
@@ -337,9 +356,11 @@ function showDetails(student) {
 
 	modal.classList.remove("hide");
 
+	modal.querySelector(".details_modal_container").style.backgroundImage = `var(--crest-${student.house.toLowerCase()}), var(--${student.house.toLowerCase()})`;
+
 	modal.querySelector("img").src = student.imageSrc;
 	modal.querySelector(".firstname span").textContent = student.firstName;
-	modal.querySelector(".middlename span").textContent = student.middleName || student.nickName;
+	student.middleName ? (modal.querySelector(".middlename span").textContent = student.middleName || student.nickName) : (modal.querySelector(".middlename span").textContent = "");
 	modal.querySelector(".lastname span").textContent = student.lastName;
 	modal.querySelector(".house span").textContent = student.house;
 	modal.querySelector(".blood span").textContent = student.bloodLine;
