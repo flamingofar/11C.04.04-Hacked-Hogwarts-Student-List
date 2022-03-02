@@ -12,9 +12,26 @@ const settings = {
 	allStudents: null,
 	filteredStudents: null,
 	blood: null,
+	wasHacked: null,
+};
+const Student = {
+	studentID: null,
+	firstName: "",
+	lastName: "",
+	middleName: null,
+	nickName: null,
+	gender: "",
+	imageSrc: "",
+	house: "",
+	prefect: false,
+	inqSquad: false,
+	bloodLine: null,
+	expelled: false,
+	cantBeExpelled: false,
 };
 window.addEventListener("DOMContentLoaded", setup);
 async function setup() {
+	getKeys();
 	// Fetch data
 	const urlStudent = "https://petlatkea.dk/2021/hogwarts/students.json";
 	const urlBlood = "https://petlatkea.dk/2021/hogwarts/families.json";
@@ -52,6 +69,7 @@ async function setup() {
 	// Build list
 }
 
+/********************************************* FETCHING JSON *********************************************/
 async function fetchJSON(studentURL, bloodURL) {
 	//Student Fetch
 	const responseUrl1 = await fetch(studentURL);
@@ -67,21 +85,8 @@ async function fetchJSON(studentURL, bloodURL) {
 	buildList();
 }
 
+/********************************************* CLEANING JSON OBJECTS *********************************************/
 function cleanData(data) {
-	const Student = {
-		studentID: null,
-		firstName: "",
-		lastName: "",
-		middleName: null,
-		nickName: null,
-		gender: "",
-		imageSrc: "",
-		house: "",
-		prefect: false,
-		inqSquad: false,
-		bloodLine: null,
-		expelled: false,
-	};
 	let dataList = [];
 	data.forEach((el, idx) => {
 		const student = Object.create(Student);
@@ -132,6 +137,7 @@ function cleanData(data) {
 	return dataList;
 }
 
+/********************************************* FILTERING *********************************************/
 function buildList() {
 	//TODO: Fix rest of filter
 	// settings.filteredStudents = settings.allStudents;
@@ -175,6 +181,7 @@ function buildList() {
 	displayList(settings.filteredStudents);
 }
 
+/********************************************* DISPLAYING STUDENTS *********************************************/
 function displayList(students) {
 	//Show number of results
 	document.querySelector(".number_result").textContent = `Showing ${students.length} results`;
@@ -221,6 +228,7 @@ function displayList(students) {
 	displayInfoNumbers();
 }
 
+/********************************************* SEARCH *********************************************/
 function searchStudents(e) {
 	displayList(
 		settings.allStudents.filter((elm) => {
@@ -235,6 +243,7 @@ function searchStudents(e) {
 	);
 }
 
+/********************************************* SORT *********************************************/
 function sortingFunction() {
 	let sortParam = this.value;
 
@@ -261,6 +270,7 @@ function sortingFunction() {
 	sortFunction();
 }
 
+/********************************************* DISPLAYING NUMBERS *********************************************/
 function displayInfoNumbers() {
 	/* SETTING NUMBERS OF STUDENTS PER HOUSE */
 	let slytheringAmount = settings.allStudents.filter((student) => {
@@ -290,6 +300,7 @@ function displayInfoNumbers() {
 	document.querySelector(".expelled").textContent = expelled.length;
 }
 
+/********************************************* EXPELL STUDENT *********************************************/
 function expellStudent(studentToExpell) {
 	// Set Expelled to true
 	studentToExpell.expelled = true;
@@ -298,14 +309,13 @@ function expellStudent(studentToExpell) {
 	buildList();
 }
 
+/********************************************* DETAILS POPUP  *********************************************/
 function showDetails(student) {
 	//TODO Set color and crest
 	console.log(student);
 	const modal = document.querySelector(".details_modal");
 	const backdrop = document.querySelector(".backdrop");
-	backdrop.addEventListener("click", () => {
-		modal.classList.add("hide");
-	});
+
 	modal.classList.remove("hide");
 
 	modal.querySelector("img").src = student.imageSrc;
@@ -314,17 +324,14 @@ function showDetails(student) {
 	modal.querySelector(".lastname span").textContent = student.lastName;
 	modal.querySelector(".house span").textContent = student.house;
 	modal.querySelector(".blood span").textContent = student.bloodLine;
-	// Close button
-	modal.querySelector(".close_btn").addEventListener("click", () => {
-		modal.classList.add("hide");
-	});
+
 	// Expell button
 	modal.querySelector(".expell_btn").addEventListener("click", expellClick);
 
 	function expellClick() {
 		modal.querySelector(".expell_btn").removeEventListener("click", expellClick);
 		expellStudent(student);
-		modal.classList.add("hide");
+		closeClick();
 	}
 	// If Expelled
 	if (student.expelled) {
@@ -334,6 +341,8 @@ function showDetails(student) {
 	// Set prefect visual
 	if (student.prefect) {
 		modal.querySelector(".left").setAttribute("data-prefect", "true");
+	} else {
+		modal.querySelector(".left").setAttribute("data-prefect", "false");
 	}
 
 	//Prefect
@@ -353,13 +362,15 @@ function showDetails(student) {
 		} else {
 			makePrefect(student);
 		}
-		modal.classList.add("hide");
+		closeClick();
 	}
 
 	/******************************************** MAKE INQUISITORIAL SQUAD*********************************************/
 	// Set InqSquad visul
 	if (student.inqSquad) {
 		modal.querySelector(".left").setAttribute("data-squad", "true");
+	} else {
+		modal.querySelector(".left").setAttribute("data-squad", "false");
 	}
 
 	if (student.inqSquad) {
@@ -381,10 +392,25 @@ function showDetails(student) {
 
 			makeInqSquad(student);
 		}
+		closeClick();
+	}
+
+	// Backdrop Close
+	backdrop.addEventListener("click", closeClick);
+	// Close button
+	modal.querySelector(".close_btn").addEventListener("click", closeClick);
+	function closeClick() {
 		modal.classList.add("hide");
+		modal.querySelector(".close_btn").removeEventListener("click", closeClick);
+		modal.querySelector(".expell_btn").removeEventListener("click", expellClick);
+		modal.querySelector("#prefect").removeEventListener("click", prefectClick);
+		modal.querySelector("#inq_squad").removeEventListener("click", inqSquadClick);
+
+		backdrop.removeEventListener("click", closeClick);
 	}
 }
 
+/********************************************* MAKE PREFECT *********************************************/
 function makePrefect(selectedStudent) {
 	const prefects = settings.allStudents.filter((selectedStudent) => selectedStudent.prefect);
 	const sameHouse = prefects.filter((student) => student.house === selectedStudent.house);
@@ -393,8 +419,7 @@ function makePrefect(selectedStudent) {
 	// console.log("Same house", sameHouse);
 	// console.log("Same house same gender", sameGender);
 
-	console.log(sameHouse);
-	//TODO: fix bug!
+	// console.log(sameHouse);
 	if (sameHouse.length > 0) {
 		if (sameGender.length > 0) {
 			removeSameGender(sameGender[0]);
@@ -456,6 +481,7 @@ function makePrefect(selectedStudent) {
 	}
 }
 
+/********************************************* GET BLOODLINE *********************************************/
 function whichBlood(lastName) {
 	let pureblood = settings.blood.pure;
 	let halfblood = settings.blood.half;
@@ -468,6 +494,7 @@ function whichBlood(lastName) {
 	}
 }
 
+/********************************************* MAKE INQUISITORIAL SQUAD *********************************************/
 function makeInqSquad(selectedStudent) {
 	if (selectedStudent.house === "slytherin" || selectedStudent.bloodLine === "Pureblood") {
 		selectedStudent.inqSquad = true;
@@ -476,4 +503,63 @@ function makeInqSquad(selectedStudent) {
 		//TODO: Make popup alert for not eligable inqsquad
 		console.log("HOLD UP!");
 	}
+}
+
+/********************************************* GET KEYSTROKES *********************************************/
+function getKeys() {
+	// Stroke Capture
+	let buffer = [];
+	// Time of last key pressed
+	let lastKeyTime = Date.now();
+
+	document.addEventListener("keyup", (e) => {
+		const charList = "abcdefghijklmnopqrstuvwxyz0123456789";
+		const key = e.key.toLowerCase();
+
+		// Only interested in alphanumeric keys (Letters and Numbers)
+		if (charList.indexOf(key) === -1) return;
+
+		// Current Time
+		const currentTime = Date.now();
+
+		if (currentTime - lastKeyTime > 1000) {
+			buffer = [];
+		}
+		buffer.push(key);
+		lastKeyTime = currentTime;
+
+		console.log(buffer);
+		console.log(lastKeyTime);
+		if (buffer.join("") === "hackme") {
+			hackTheSystem();
+		}
+	});
+}
+
+/********************************************* HACKING *********************************************/
+function hackTheSystem() {
+	if (settings.wasHacked) {
+		console.log("Can't Be hacked again");
+	} else {
+		settings.wasHacked = true;
+		addSelf();
+		console.log("Hacking started");
+	}
+}
+
+function addSelf() {
+	const self = Object.create(Student);
+	self.studentID = "69";
+	self.firstName = "Malte";
+	self.middleName = "Tambo";
+	self.lastName = "Skjoldager";
+	self.gender = "boy";
+	self.house = "Gryffindor";
+	self.imageSrc = "./assets/img/mig.jpg";
+	self.cantBeExpelled = true;
+
+	console.log(self);
+	settings.allStudents.push(self);
+	buildList();
+	console.log(settings.allStudents);
 }

@@ -114,7 +114,6 @@ header {
 	right: 0;
 }
 
-/*TODO PREFECT CREST details PU buggy*/
 [data-prefect="true"] {
 	position: relative;
 }
