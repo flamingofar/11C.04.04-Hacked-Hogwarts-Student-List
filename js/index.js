@@ -134,7 +134,7 @@ function cleanData(data) {
 
 function buildList() {
 	//TODO: Fix rest of filter
-	settings.filteredStudents = settings.allStudents;
+	// settings.filteredStudents = settings.allStudents;
 
 	switch (settings.filter) {
 		case "*":
@@ -333,7 +333,6 @@ function showDetails(student) {
 	/******************************************** MAKE PREFECT *********************************************/
 	// Set prefect visual
 	if (student.prefect) {
-		console.log("PREFECT");
 		modal.querySelector(".left").setAttribute("data-prefect", "true");
 	}
 
@@ -358,6 +357,10 @@ function showDetails(student) {
 	}
 
 	/******************************************** MAKE INQUISITORIAL SQUAD*********************************************/
+	// Set InqSquad visul
+	if (student.inqSquad) {
+		modal.querySelector(".left").setAttribute("data-squad", "true");
+	}
 
 	if (student.inqSquad) {
 		modal.querySelector("#inq_squad").textContent = "Remove from Inq. Squad";
