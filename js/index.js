@@ -64,7 +64,7 @@ async function fetchJSON(studentURL, bloodURL) {
 	settings.allStudents = cleanData(studentData);
 	settings.filteredStudents = settings.allStudents;
 
-	displayList(settings.filteredStudents);
+	buildList();
 }
 
 function cleanData(data) {
@@ -207,11 +207,10 @@ function displayList(students) {
 			clone.querySelector(".status").textContent = "";
 		}
 
-		//TODO If student is pureblood, halfblood or muggle
-
 		// DETAILS MODAL
 		clone.querySelector(".student_container").addEventListener("click", detailsClick);
 		function detailsClick() {
+			console.log("Details  Click: ", student);
 			showDetails(student);
 		}
 
@@ -300,6 +299,7 @@ function expellStudent(studentToExpell) {
 }
 
 function showDetails(student) {
+	//TODO Set color and crest
 	console.log(student);
 	const modal = document.querySelector(".details_modal");
 	const backdrop = document.querySelector(".backdrop");
@@ -350,7 +350,7 @@ function showDetails(student) {
 		modal.querySelector("#prefect").removeEventListener("click", prefectClick);
 		if (student.prefect === true) {
 			student.prefect = false;
-			displayList(settings.filteredStudents);
+			buildList();
 		} else {
 			makePrefect(student);
 		}
@@ -372,7 +372,7 @@ function showDetails(student) {
 		if (student.inqSquad === true) {
 			console.log("Setting to false");
 			student.inqSquad = false;
-			displayList(settings.filteredStudents);
+			buildList();
 		} else {
 			console.log("Making InqSquad");
 
@@ -386,11 +386,10 @@ function makePrefect(selectedStudent) {
 	const prefects = settings.allStudents.filter((selectedStudent) => selectedStudent.prefect);
 	const sameHouse = prefects.filter((student) => student.house === selectedStudent.house);
 	const sameGender = sameHouse.filter((student) => student.gender === selectedStudent.gender);
-	console.log("Prefects: ", prefects);
-	console.log("Same house", sameHouse);
-	console.log("Same house same gender", sameGender);
-	//TESTING
-	// addPrefect(selectedStudent);
+	// console.log("Prefects: ", prefects);
+	// console.log("Same house", sameHouse);
+	// console.log("Same house same gender", sameGender);
+
 	console.log(sameHouse);
 	//TODO: fix bug!
 	if (sameHouse.length > 0) {
@@ -438,7 +437,7 @@ function makePrefect(selectedStudent) {
 			addPrefect(selectedStudent);
 			sameGenderPU.classList.add("hide");
 			document.querySelector(".details_modal").classList.add("hide");
-			displayList(settings.filteredStudents);
+			buildList();
 			sameGenderPU.querySelector(".yes").removeEventListener("click", removeSameClick);
 
 			console.log(prefects);
@@ -470,8 +469,6 @@ function makeInqSquad(selectedStudent) {
 	if (selectedStudent.house === "slytherin" || selectedStudent.bloodLine === "Pureblood") {
 		selectedStudent.inqSquad = true;
 		buildList();
-		console.log(selectedStudent);
-		console.log("Eligable");
 	} else {
 		//TODO: Make popup alert for not eligable inqsquad
 		console.log("HOLD UP!");
