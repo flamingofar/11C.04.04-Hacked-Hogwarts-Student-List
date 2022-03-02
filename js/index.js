@@ -129,9 +129,6 @@ function cleanData(data) {
 
 /********************************************* FILTERING || GATEWAY TO DISPLATLIST *********************************************/
 function buildList() {
-	//TODO: Fix rest of filter
-	// settings.filteredStudents = settings.allStudents;
-
 	switch (settings.filter) {
 		case "*":
 			settings.filteredStudents = settings.allStudents;
@@ -141,6 +138,15 @@ function buildList() {
 			break;
 		case "true":
 			settings.filteredStudents = settings.allStudents.filter(filterStudentsExpelled);
+			break;
+		case "inq_squad":
+			console.log("INQ SQUAD");
+			settings.filteredStudents = settings.allStudents.filter(filterStudentsInqSquad);
+			break;
+			console.log("INQ SQUAD");
+		case "prefect":
+			console.log("PREFECT");
+			settings.filteredStudents = settings.allStudents.filter(filterStudentsPrefects);
 			break;
 		default:
 			settings.filteredStudents = settings.allStudents.filter(filterStudents);
@@ -163,6 +169,22 @@ function buildList() {
 	}
 	function filterStudentsNotExpelled(student) {
 		if (student[settings.filterType] === false) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function filterStudentsPrefects(student) {
+		console.log(settings.filterType);
+
+		if (student[settings.filterType] === true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function filterStudentsInqSquad(student) {
+		if (student[settings.filterType] === true) {
 			return true;
 		} else {
 			return false;
@@ -235,9 +257,18 @@ function searchStudents(e) {
 /********************************************* SORT *********************************************/
 function sortingFunction() {
 	let sortParam = this.value;
+	let direction;
 
-	function sortFunction() {
-		settings.filteredStudents.sort(compare);
+	if (document.querySelector("#sort").innerText.endsWith("Z-A")) {
+		direction = "desc";
+	} else direction = "asc";
+
+	function sortFunction(direction) {
+		if (direction === "asc") {
+			settings.filteredStudents.sort(compare);
+		} else if (direction === "desc") {
+			settings.filteredStudents.sort(compareReverse);
+		}
 
 		buildList();
 	}
@@ -256,7 +287,7 @@ function sortingFunction() {
 			return 1;
 		}
 	}
-	sortFunction();
+	sortFunction(direction);
 }
 
 /********************************************* DISPLAYING NUMBERS *********************************************/
@@ -329,6 +360,8 @@ function showDetails(student) {
 	// If Expelled
 	if (student.expelled) {
 		modal.classList.add("expelled");
+	} else {
+		modal.classList.remove("expelled");
 	}
 	/******************************************** MAKE PREFECT *********************************************/
 	// Set prefect visual
@@ -477,6 +510,8 @@ function whichBlood(lastName) {
 		return "Halfblood";
 	} else if (pureblood.includes(lastName) && !halfblood.includes(lastName)) {
 		return "Pureblood";
+	} else if (!pureblood.includes(lastName) && halfblood.includes(lastName)) {
+		return "Halfblood";
 	} else {
 		return "Muggle";
 	}

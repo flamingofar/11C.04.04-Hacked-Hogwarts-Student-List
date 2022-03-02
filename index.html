@@ -17,11 +17,16 @@
 				<p class="number_result">Showing %% results</p>
 
 				<input id="search" type="text" placeholder="Search Student" />
-				<select name="sort" id="sort">
+				<select name="sort" id="sort" data-direction="asc">
 					<option value="" selected>Sort by:</option>
-					<option value="firstName" data-action="sort" data-direction="asc">First Name</option>
-					<option value="lastName" data-action="sort" data-direction="asc">Last Name</option>
-					<option value="house" data-action="sort" data-direction="asc">House</option>
+					<option value="firstName" data-action="sort">First Name A-Z</option>
+					<option value="lastName" data-action="sort">Last Name A-Z</option>
+					<option value="house" data-action="sort">House A-Z</option>
+					<option value="studentID" data-action="sort">Student ID A-Z</option>
+					<option value="firstName" data-action="sort">First Name Z-A</option>
+					<option value="lastName" data-action="sort">Last Name Z-A</option>
+					<option value="house" data-action="sort">House Z-A</option>
+					<option value="studentID" data-action="sort">Student ID Z-A</option>
 				</select>
 				<div class="filter_house">
 					<h3>Filter by house</h3>
@@ -44,15 +49,15 @@
 					<div class="btn_container">
 						<button data-action="filter" data-filter="true" data-filter-type="expelled">Expelled</button>
 						<button data-action="filter" data-filter="false" data-filter-type="expelled">Non-Expelled</button>
-						<button data-action="filter" data-filter="inq_squad" data-filter-type="inq_squad">Inquisitorial Squad</button>
+						<button data-action="filter" data-filter="inq_squad" data-filter-type="inqSquad">Inquisitorial Squad</button>
 						<button data-action="filter" data-filter="prefect" data-filter-type="prefect">Prefects</button>
 					</div>
 				</div>
 				<div class="filter_blood">
 					<h3>Filter by blood</h3>
 					<div class="btn_container">
-						<button data-action="filter" data-filter="pureblood" data-filter-type="bloodline">Pure Blood</button>
-						<button data-action="filter" data-filter="halfblood" data-filter-type="bloodline">Half Blood</button>
+						<button data-action="filter" data-filter="pureblood" data-filter-type="bloodLine">Pure Blood</button>
+						<button data-action="filter" data-filter="halfblood" data-filter-type="bloodLine">Half Blood</button>
 					</div>
 				</div>
 				<button class="reset" data-action="filter" data-filter="*">All</button>
