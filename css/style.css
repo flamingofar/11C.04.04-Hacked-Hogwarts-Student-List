@@ -104,12 +104,11 @@ header {
 	background: rgb(154, 78, 254);
 	transform: translate(-50%, -50%) rotate(-45deg);
 }
-/*TODO PREFECT CREST */
+/*TODO PREFECT CREST details PU buggy*/
 [data-prefect="true"] {
 	position: relative;
 }
-[data-prefect="true"]::after,
-.left:after {
+[data-prefect="true"]::after {
 	position: absolute;
 	content: "";
 	bottom: 0;
@@ -124,7 +123,7 @@ header {
 	z-index: 0;
 }
 
-.left::after {
+[data-prefect="true"].left::after {
 	transform: translate(80%, -130%);
 	bottom: 0;
 	right: 0;
