@@ -30,6 +30,8 @@ const Student = {
 	cantBeExpelled: false,
 };
 window.addEventListener("DOMContentLoaded", setup);
+//********************************************************************************************
+/********************************************* SETUP  *********************************************/
 async function setup() {
 	getKeys();
 	// Fetch data
@@ -57,8 +59,10 @@ async function setup() {
 	sortSelect.addEventListener("change", sortingFunction);
 
 	// Build list
+	buildList();
 }
 
+//********************************************************************************************
 /********************************************* FETCHING JSON *********************************************/
 async function fetchJSON(studentURL, bloodURL) {
 	//Student Fetch
@@ -73,10 +77,9 @@ async function fetchJSON(studentURL, bloodURL) {
 	settings.filteredStudents = settings.allStudents;
 
 	// console.log(studentData);
-
-	buildList();
 }
 
+//********************************************************************************************
 /********************************************* CLEANING JSON OBJECTS *********************************************/
 function cleanData(data) {
 	let dataList = [];
@@ -147,6 +150,7 @@ function cleanData(data) {
 	return dataList;
 }
 
+//********************************************************************************************
 /********************************************* FILTERING || GATEWAY TO DISPLATLIST *********************************************/
 function buildList() {
 	switch (settings.filter) {
@@ -213,6 +217,7 @@ function buildList() {
 	displayList(settings.filteredStudents);
 }
 
+//********************************************************************************************
 /********************************************* DISPLAYING STUDENTS *********************************************/
 function displayList(students) {
 	//Show number of results
@@ -258,6 +263,7 @@ function displayList(students) {
 	displayInfoNumbers();
 }
 
+//********************************************************************************************
 /********************************************* SEARCH *********************************************/
 function searchStudents(e) {
 	displayList(
@@ -273,6 +279,7 @@ function searchStudents(e) {
 	);
 }
 
+//********************************************************************************************
 /********************************************* SORT *********************************************/
 function sortingFunction() {
 	let sortParam = this.value;
@@ -309,6 +316,7 @@ function sortingFunction() {
 	sortFunction(direction);
 }
 
+//********************************************************************************************
 /********************************************* DISPLAYING NUMBERS *********************************************/
 function displayInfoNumbers() {
 	/* SETTING NUMBERS OF STUDENTS PER HOUSE */
@@ -339,6 +347,7 @@ function displayInfoNumbers() {
 	document.querySelector(".expelled").textContent = expelled.length;
 }
 
+//********************************************************************************************
 /********************************************* EXPELL STUDENT *********************************************/
 function expellStudent(studentToExpell) {
 	// Set Expelled to true
@@ -348,9 +357,9 @@ function expellStudent(studentToExpell) {
 	buildList();
 }
 
+//********************************************************************************************
 /********************************************* DETAILS POPUP  *********************************************/
 function showDetails(student) {
-	//TODO Set color and crest
 	const modal = document.querySelector(".details_modal");
 	const backdrop = document.querySelector(".backdrop");
 
@@ -453,6 +462,7 @@ function showDetails(student) {
 	}
 }
 
+//********************************************************************************************
 /********************************************* MAKE PREFECT *********************************************/
 function makePrefect(selectedStudent) {
 	const prefects = settings.allStudents.filter((selectedStudent) => selectedStudent.prefect);
@@ -523,6 +533,7 @@ function makePrefect(selectedStudent) {
 	}
 }
 
+//********************************************************************************************
 /********************************************* GET BLOODLINE *********************************************/
 function whichBlood(lastName) {
 	let pureblood = settings.blood.pure;
@@ -538,6 +549,7 @@ function whichBlood(lastName) {
 	}
 }
 
+//********************************************************************************************
 /********************************************* MAKE INQUISITORIAL SQUAD *********************************************/
 function makeInqSquad(selectedStudent) {
 	if (selectedStudent.house === "slytherin" || selectedStudent.bloodLine === "Pureblood") {
@@ -553,6 +565,7 @@ function makeInqSquad(selectedStudent) {
 	}
 }
 
+//********************************************************************************************
 /********************************************* GET KEYSTROKES *********************************************/
 function getKeys() {
 	// Stroke Capture
@@ -582,6 +595,7 @@ function getKeys() {
 	});
 }
 
+//********************************************************************************************
 /********************************************* HACKING *********************************************/
 function hackTheSystem() {
 	if (settings.wasHacked) {
